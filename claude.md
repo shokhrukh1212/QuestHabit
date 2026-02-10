@@ -17,7 +17,28 @@ product description.
 
 ## Design Reference
 
-- All screen designs are in `/designs/` as PNG images.
+### Source of Truth (priority order)
+1. **`docs/product-bible-v4.md`** — Product vision, narrative framing, user
+   stories, and feature rationale. Explains WHY each screen exists and how
+   it fits the core philosophy ("real life as the controller").
+2. **`docs/uizard-prompts-v2.md`** — Detailed textual descriptions of every
+   screen: layout, elements, colors, interactions, exact copy, and animation
+   specs. The most granular design specification.
+3. **`/designs/*.png`** — AI-generated reference images. Visual direction
+   only — NOT pixel-perfect specs.
+
+### Design images are references, not specs
+The PNG images in `/designs/` were generated with AI tools (Uizard). They
+provide a visual baseline but often miss nuanced product requirements. When
+implementing any screen:
+- Read the corresponding uizard prompt for layout structure.
+- Read the product bible for narrative intent and emotional goals.
+- View the design image for visual direction.
+- **Always try to do better.** Improve layouts, interactions, spacing,
+  animations, and atmosphere beyond what the AI image shows. You have full
+  context from the docs to make informed design decisions.
+
+### File naming conventions
 - Screen ID titles match the Product Bible (for example, there is "P.3 Path Fork (Class Selection)"
   P.3 is the ID, and "Path Fork (Class Selection)" is the ID title, and its UI image is
   Path Fork (Class Selection).png, and there is "D.6 All Quests Done (Campfire Celebration)"
@@ -28,9 +49,6 @@ product description.
   Sometimes, the sign (-) is converted to the sign (/).
   and there are some pngs that has [name] (alternative_1 or alternative_2).png
   and this UI is the alternative image of [name].png
-
-- The Uizard prompts in `docs/uizard-prompts-v2.md` describe each screen
-  in detail including exact text content, layout, colors, and interactions.
 
 ## Key Design Tokens
 
@@ -43,6 +61,20 @@ product description.
 - Text Primary: #FFFFFF
 - Text Muted: #7F8C8D
 - Font: System default (no custom fonts for MVP)
+
+## Expo / React Native Gotchas
+
+- **Always use `npx expo install`** for packages with native modules
+  (e.g. react-native-reanimated, react-native-worklets, expo-image).
+  Never `npm install` — Expo Go bundles specific native versions and the
+  JS side must match exactly.
+- **Always wrap the app with `<SafeAreaProvider>`** from
+  `react-native-safe-area-context` in the root layout. Never import
+  `SafeAreaView` from `react-native` (deprecated). Always use
+  `SafeAreaView` from `react-native-safe-area-context`.
+- **`--legacy-peer-deps`** is needed for NativeWind v4 installs but
+  skips automatic peer dependency resolution. After using it, manually
+  verify all peer deps are installed.
 
 ## Code Standards
 
@@ -169,7 +201,7 @@ Claude must treat Git discipline as part of the architecture.
 ## Implementation Order
 
 Follow the phases in `docs/implementation-phases.md`.
-Current phase: [UPDATE THIS AS YOU PROGRESS]
+Current phase: Phase 2 — The Prologue (7-screen onboarding)
 
 ## Important Product Rules
 
