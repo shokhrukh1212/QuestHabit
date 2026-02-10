@@ -1,11 +1,18 @@
-import { Redirect } from "expo-router";
-
 /**
- * Entry point — redirects to the main tab navigator.
- * Later this will check if the user has completed the Prologue
- * and redirect to (prologue) if not.
+ * Entry point — checks prologue completion status.
+ * Routes to (prologue) for new users, (tabs) for returning users.
  */
 
+import { Redirect } from "expo-router";
+
+import { usePrologueStore } from "@/stores/prologue-store";
+
 export default function Index() {
-  return <Redirect href="/(tabs)/quest-path" />;
+  const currentStep = usePrologueStore((s) => s.currentStep);
+
+  if (currentStep === "completed") {
+    return <Redirect href="/(tabs)/quest-path" />;
+  }
+
+  return <Redirect href="/(prologue)/cave-awakening" />;
 }

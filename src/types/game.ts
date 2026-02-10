@@ -5,7 +5,13 @@
 
 // --- Character ---
 
-export type CharacterClass = "warrior" | "mage" | "rogue";
+export type CharacterClass = "warrior" | "mage" | "rogue" | "ranger";
+
+export interface CharacterAppearance {
+  skinTone: number;
+  hairStyle: number;
+  hairColor: number;
+}
 
 export interface CharacterStats {
   strength: number;
@@ -51,7 +57,16 @@ export interface EquippedGear {
 
 export type HabitCategory = "fitness" | "learning" | "discipline" | "social";
 
-export type HabitFrequency = "daily" | "weekdays" | "weekends" | "custom";
+export type HabitFrequency =
+  | "daily"
+  | "weekdays"
+  | "weekends"
+  | "custom"
+  | "5x_week"
+  | "4x_week"
+  | "3x_week"
+  | "weekly"
+  | "monthly";
 
 export interface Habit {
   id: string;
