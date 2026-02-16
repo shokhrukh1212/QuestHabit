@@ -3,12 +3,13 @@
  * Design ref: designs/Quest Path (Main Daily Screen).png
  *
  * The screen users see every day. Habits are waypoints on a journey.
- * Character walks left to right. Campfire at the end.
+ * Full landscape background. Character walks left to right. Campfire at the end.
  * Tap active waypoints to open encounter modal.
  */
 
 import { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 
 import { CharacterBanner } from "@/components/ui/CharacterBanner";
@@ -23,6 +24,7 @@ import { useDailyReset } from "@/hooks/useDailyReset";
 import { BASE_XP_PER_HABIT, PERFECT_DAY_BONUS } from "@/lib/game-rules";
 import { getNarrative } from "@/lib/narrative-text";
 import { calculateStreak } from "@/lib/streak-utils";
+import { iconImages, sceneImages } from "@/lib/assets";
 import { useCharacterStore } from "@/stores/character-store";
 import { useHabitStore } from "@/stores/habit-store";
 import { useQuestStore } from "@/stores/quest-store";
@@ -50,8 +52,7 @@ export default function QuestPathScreen() {
   const events = useHabitStore((s) => s.events);
 
   const addXp = useCharacterStore((s) => s.addXp);
-  const updateStats = useCharacterStore((s) => s.updateStats);
-  const character = useCharacterStore((s) => s.character);
+  const incrementStat = useCharacterStore((s) => s.incrementStat);
 
   const [screenState, setScreenState] = useState<ScreenState>("quest_path");
   const [activeWaypoint, setActiveWaypoint] = useState<QuestWaypoint | null>(
@@ -62,6 +63,7 @@ export default function QuestPathScreen() {
     statName: string;
     statBonus: number;
     streak: number;
+    completionScene: ReturnType<typeof getNarrative>["completionScene"];
   } | null>(null);
 
   // Show missed scene on first load if yesterday was incomplete
@@ -94,13 +96,13 @@ export default function QuestPathScreen() {
     // Add XP
     addXp(BASE_XP_PER_HABIT);
 
-    // Update stat
+    // Update stat — using incrementStat to avoid stale closure
     const statKey = narrative.statName.toLowerCase() as
       | "strength"
       | "intelligence"
       | "discipline"
       | "charisma";
-    updateStats({ [statKey]: (character?.stats[statKey] ?? 5) + narrative.statBonus });
+    incrementStat(statKey, narrative.statBonus);
 
     // Calculate streak
     const streak = calculateStreak(events, habit.id);
@@ -110,10 +112,11 @@ export default function QuestPathScreen() {
       xp: BASE_XP_PER_HABIT,
       statName: narrative.statName,
       statBonus: narrative.statBonus,
-      streak: streak.current + 1, // +1 because we just completed
+      streak: streak.current + 1,
+      completionScene: narrative.completionScene,
     });
     setScreenState("celebration");
-  }, [activeWaypoint, completeHabit, completeWaypoint, addXp, updateStats, character, events]);
+  }, [activeWaypoint, completeHabit, completeWaypoint, addXp, incrementStat, events]);
 
   const handleCelebrationDone = useCallback(() => {
     setCelebrationData(null);
@@ -187,6 +190,7 @@ export default function QuestPathScreen() {
         statName={celebrationData.statName}
         statBonus={celebrationData.statBonus}
         streak={celebrationData.streak}
+        completionScene={celebrationData.completionScene}
         onDone={handleCelebrationDone}
       />
     );
@@ -205,6 +209,30 @@ export default function QuestPathScreen() {
   // --- Main Quest Path ---
   return (
     <ScreenWrapper>
+      {/* Background landscape image */}
+      <Image
+        source={sceneImages.questPathBg}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+        contentFit="cover"
+      />
+      {/* Dark overlay for readability */}
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(13, 13, 26, 0.55)",
+        }}
+      />
+
       <CharacterBanner />
 
       <View className="flex-1 justify-center">
@@ -213,16 +241,19 @@ export default function QuestPathScreen() {
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
-            paddingHorizontal: 24,
+            paddingHorizontal: 32,
+            paddingRight: 48,
             alignItems: "center",
-            gap: 16,
-            minWidth: "100%",
-            justifyContent: "center",
+            gap: 8,
           }}
         >
           {/* Character at start */}
           <View style={{ alignItems: "center", width: 50 }}>
-            <Text style={{ fontSize: 32 }}>🧙</Text>
+            <Image
+              source={iconImages.characterAvatar}
+              style={{ width: 44, height: 44 }}
+              contentFit="contain"
+            />
           </View>
 
           {/* Path segments + waypoints */}
@@ -231,14 +262,15 @@ export default function QuestPathScreen() {
               key={wp.habitId}
               style={{ flexDirection: "row", alignItems: "center" }}
             >
-              {/* Path line */}
+              {/* Path line — thicker */}
               <View
                 style={{
-                  width: 24,
-                  height: 2,
+                  width: 20,
+                  height: 3,
                   backgroundColor:
                     index <= completedCount - 1 ? "#2ECC71" : "#3A3A5E",
                   marginRight: 4,
+                  borderRadius: 1.5,
                 }}
               />
               <QuestWaypointNode
@@ -251,9 +283,10 @@ export default function QuestPathScreen() {
           {/* Path line to campfire */}
           <View
             style={{
-              width: 24,
-              height: 2,
+              width: 20,
+              height: 3,
               backgroundColor: allDone ? "#2ECC71" : "#3A3A5E",
+              borderRadius: 1.5,
             }}
           />
 
@@ -264,19 +297,27 @@ export default function QuestPathScreen() {
               opacity: allDone ? 1 : 0.4,
             }}
             transition={{ type: "timing", duration: 1000, loop: !allDone }}
-            style={{ alignItems: "center", width: 50 }}
+            style={{ alignItems: "center", width: 56 }}
           >
-            <Text style={{ fontSize: 32 }}>🔥</Text>
+            <Image
+              source={iconImages.campfire}
+              style={{ width: 48, height: 48 }}
+              contentFit="contain"
+            />
           </MotiView>
         </ScrollView>
 
         {/* Progress text */}
         <Text
           style={{
-            color: "#B0B0C0",
+            color: "#FFFFFF",
             fontSize: 14,
+            fontWeight: "600",
             textAlign: "center",
             marginTop: 24,
+            textShadowColor: "rgba(0, 0, 0, 0.8)",
+            textShadowOffset: { width: 0, height: 1 },
+            textShadowRadius: 4,
           }}
         >
           {completedCount}/{totalCount} quests complete

@@ -5,8 +5,10 @@
  */
 
 import { Text, View } from "react-native";
+import { Image } from "expo-image";
 
 import { XPBar } from "@/components/ui/XPBar";
+import { iconImages } from "@/lib/assets";
 import { useCharacterStore, useXpProgress } from "@/stores/character-store";
 
 export function CharacterBanner() {
@@ -41,7 +43,11 @@ export function CharacterBanner() {
           borderColor: "#3A3A5E",
         }}
       >
-        <Text style={{ fontSize: 24 }}>🧙</Text>
+        <Image
+          source={iconImages.characterAvatar}
+          style={{ width: 32, height: 32 }}
+          contentFit="contain"
+        />
       </View>
 
       {/* XP bar + level */}

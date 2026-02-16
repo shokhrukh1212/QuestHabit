@@ -10,7 +10,6 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 import { BASE_XP_PER_HABIT } from "@/lib/game-rules";
-import { getNarrative } from "@/lib/narrative-text";
 import { getTodayDateString } from "@/lib/streak-utils";
 import type { PrologueHabit } from "@/stores/prologue-store";
 import type {
@@ -51,7 +50,7 @@ function generateId(): string {
 }
 
 function getIconKey(category: HabitCategory): string {
-  return getNarrative(category).icon;
+  return category;
 }
 
 /**

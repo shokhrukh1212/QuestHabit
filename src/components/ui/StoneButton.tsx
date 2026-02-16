@@ -11,6 +11,7 @@ import {
   Text,
   View,
 } from "react-native";
+import * as Haptics from "expo-haptics";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -94,6 +95,7 @@ export function StoneButton({
 
   const handlePressIn = () => {
     scale.value = withTiming(0.95, { duration: 100 });
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const handlePressOut = () => {

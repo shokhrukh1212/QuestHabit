@@ -7,10 +7,12 @@
  */
 
 import { Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
 import { StoneButton } from "@/components/ui/StoneButton";
+import { sceneImages } from "@/lib/assets";
 import { PERFECT_DAY_BONUS } from "@/lib/game-rules";
 
 interface CampfireCelebrationProps {
@@ -21,46 +23,19 @@ export function CampfireCelebration({ onDone }: CampfireCelebrationProps) {
   return (
     <ScreenWrapper bgColor="#0A0A14" fullScreen>
       <View className="flex-1 justify-end">
-        {/* Celebration scene */}
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+        {/* Celebration scene — full pixel-art campfire */}
+        <MotiView
+          from={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ type: "timing", duration: 1200 }}
+          style={{ flex: 1 }}
         >
-          {/* Stars */}
-          <MotiView
-            from={{ opacity: 0.4 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "timing", duration: 2000, loop: true }}
-            style={{ position: "absolute", top: "12%" }}
-          >
-            <Text style={{ fontSize: 14, color: "#FFFFFF" }}>✧ ✦ ✧ ✦ ✧</Text>
-          </MotiView>
-
-          {/* Cozy campfire scene */}
-          <MotiView
-            from={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: "timing", duration: 1200 }}
-          >
-            <View style={{ alignItems: "center" }}>
-              <Text style={{ fontSize: 64 }}>🏕️</Text>
-              {/* Warm glow effect */}
-              <View
-                style={{
-                  position: "absolute",
-                  bottom: -10,
-                  width: 120,
-                  height: 60,
-                  borderRadius: 60,
-                  backgroundColor: "rgba(244, 162, 97, 0.15)",
-                }}
-              />
-            </View>
-          </MotiView>
-        </View>
+          <Image
+            source={sceneImages.campfireCelebration}
+            style={{ width: "100%", height: "100%" }}
+            contentFit="cover"
+          />
+        </MotiView>
 
         {/* Celebration text + button */}
         <View style={{ paddingHorizontal: 24, paddingBottom: 48 }}>
