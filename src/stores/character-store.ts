@@ -8,19 +8,35 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { levelFromTotalXp, xpProgressInCurrentLevel } from "@/lib/game-rules";
+import { getRewardForLevel } from "@/lib/gear-data";
+import {
+  LEVEL_UP_STAT_BONUSES,
+  levelFromTotalXp,
+  xpProgressInCurrentLevel,
+} from "@/lib/game-rules";
 import type {
   Character,
   CharacterAppearance,
   CharacterClass,
   CharacterStats,
+  GearItem,
+  GearSlot,
 } from "@/types/game";
+
+/** Data produced when a level-up occurs — consumed by the celebration screen. */
+export interface PendingLevelUp {
+  newLevel: number;
+  statIncreases: CharacterStats;
+  rewardGear: GearItem | null;
+}
 
 interface CharacterState {
   character: Character | null;
   isLoading: boolean;
   /** Number of days since user started (day 1 = prologue completion day). */
   startDate: string | null; // YYYY-MM-DD
+  /** Set when a level-up occurs — cleared after celebration is shown. */
+  pendingLevelUp: PendingLevelUp | null;
 }
 
 interface CharacterActions {
@@ -31,6 +47,12 @@ interface CharacterActions {
   updateStats: (stats: Partial<CharacterStats>) => void;
   /** Increment a single stat by a delta (reads current value inside updater to avoid stale closures). */
   incrementStat: (stat: keyof CharacterStats, delta: number) => void;
+  /** Equip a gear item (replaces current item in that slot). */
+  equipGear: (gear: GearItem) => void;
+  /** Unequip a gear slot. */
+  unequipGear: (slot: GearSlot) => void;
+  /** Clear the pending level-up after the celebration screen is shown. */
+  clearPendingLevelUp: () => void;
   /** Initialize character from prologue data (one-time). */
   initFromPrologue: (
     name: string,
@@ -62,6 +84,7 @@ export const useCharacterStore = create<
       character: null,
       isLoading: true,
       startDate: null,
+      pendingLevelUp: null,
 
       setCharacter: (character) => set({ character, isLoading: false }),
 
@@ -74,13 +97,45 @@ export const useCharacterStore = create<
         const newLevel = levelFromTotalXp(newTotalXp);
         const leveledUp = newLevel > oldLevel;
 
-        set({
-          character: {
-            ...character,
-            totalXp: newTotalXp,
-            level: newLevel,
-          },
-        });
+        if (leveledUp) {
+          // Compute stat bonuses from class
+          const statIncreases =
+            LEVEL_UP_STAT_BONUSES[character.characterClass];
+
+          // Apply stat bonuses immediately
+          const newStats: CharacterStats = {
+            strength: character.stats.strength + statIncreases.strength,
+            intelligence:
+              character.stats.intelligence + statIncreases.intelligence,
+            discipline: character.stats.discipline + statIncreases.discipline,
+            charisma: character.stats.charisma + statIncreases.charisma,
+          };
+
+          // Check for gear reward
+          const rewardGear = getRewardForLevel(newLevel);
+
+          set({
+            character: {
+              ...character,
+              totalXp: newTotalXp,
+              level: newLevel,
+              stats: newStats,
+            },
+            pendingLevelUp: {
+              newLevel,
+              statIncreases,
+              rewardGear,
+            },
+          });
+        } else {
+          set({
+            character: {
+              ...character,
+              totalXp: newTotalXp,
+              level: newLevel,
+            },
+          });
+        }
 
         return leveledUp;
       },
@@ -115,6 +170,36 @@ export const useCharacterStore = create<
             },
           };
         }),
+
+      equipGear: (gear) =>
+        set((state) => {
+          if (!state.character) return state;
+          return {
+            character: {
+              ...state.character,
+              equippedGear: {
+                ...state.character.equippedGear,
+                [gear.slot]: gear,
+              },
+            },
+          };
+        }),
+
+      unequipGear: (slot) =>
+        set((state) => {
+          if (!state.character) return state;
+          return {
+            character: {
+              ...state.character,
+              equippedGear: {
+                ...state.character.equippedGear,
+                [slot]: null,
+              },
+            },
+          };
+        }),
+
+      clearPendingLevelUp: () => set({ pendingLevelUp: null }),
 
       initFromPrologue: (name, characterClass, appearance, totalXp) => {
         if (get().character) return; // Already initialized
@@ -160,7 +245,13 @@ export const useCharacterStore = create<
 
       setLoading: (isLoading) => set({ isLoading }),
 
-      reset: () => set({ character: null, isLoading: true, startDate: null }),
+      reset: () =>
+        set({
+          character: null,
+          isLoading: true,
+          startDate: null,
+          pendingLevelUp: null,
+        }),
     }),
     {
       name: STORAGE_KEY,

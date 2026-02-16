@@ -3,6 +3,46 @@
  * Every game mechanic references this file. Never hardcode game values elsewhere.
  */
 
+// --- Character Stats ---
+
+import type { CharacterClass, CharacterStats } from "@/types/game";
+
+/** Per-class stat gains when leveling up. */
+export const LEVEL_UP_STAT_BONUSES: Record<CharacterClass, CharacterStats> = {
+  warrior: { strength: 3, intelligence: 1, discipline: 2, charisma: 1 },
+  mage: { strength: 1, intelligence: 3, discipline: 1, charisma: 2 },
+  rogue: { strength: 2, intelligence: 1, discipline: 3, charisma: 1 },
+  ranger: { strength: 1, intelligence: 2, discipline: 1, charisma: 3 },
+};
+
+/** UI color per stat. */
+export const STAT_COLORS: Record<keyof CharacterStats, string> = {
+  strength: "#E74C3C",
+  intelligence: "#3498DB",
+  discipline: "#6C5CE7",
+  charisma: "#2ECC71",
+};
+
+/** Stat tier thresholds — the label for the highest threshold <= value applies. */
+export const STAT_MILESTONES = [
+  { threshold: 0, label: "Novice" },
+  { threshold: 15, label: "Apprentice" },
+  { threshold: 30, label: "Adept" },
+  { threshold: 50, label: "Expert" },
+  { threshold: 75, label: "Master" },
+  { threshold: 100, label: "Legend" },
+] as const;
+
+/** Get the tier label for a given stat value. */
+export function getStatTier(value: number): string {
+  let tier: string = STAT_MILESTONES[0].label;
+  for (const milestone of STAT_MILESTONES) {
+    if (value >= milestone.threshold) tier = milestone.label;
+    else break;
+  }
+  return tier;
+}
+
 // --- XP & Leveling ---
 export const BASE_XP_PER_HABIT = 50;
 export const FUSED_HABIT_XP = 150;

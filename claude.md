@@ -201,7 +201,7 @@ Claude must treat Git discipline as part of the architecture.
 ## Implementation Order
 
 Follow the phases in `docs/implementation-phases.md`.
-Current phase: Phase 2 — The Prologue (7-screen onboarding)
+Current phase: Phase 5 — Authentication (Play First, Save Later)
 
 ## Important Product Rules
 
