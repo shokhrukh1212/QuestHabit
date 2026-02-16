@@ -19,9 +19,8 @@ export const sceneImages = {
   sirenResist: require("../../assets/images/scenes/Siren Resist.webp"),
   missedHabitNight: require("../../assets/images/scenes/Missed Habit Night.webp"),
   campfireCelebration: require("../../assets/images/scenes/Campfire Celebration.webp"),
+  levelUpCelebration: require("../../assets/images/scenes/Level Up Celebration.webp"),
 } as const;
-
-// --- Icons (small, png format) ---
 
 // --- Hairstyle Icons (character mirror, png format) ---
 
@@ -42,4 +41,38 @@ export const iconImages = {
   siren: require("../../assets/images/icons/Siren Icon.png"),
   campfire: require("../../assets/images/icons/Campfire Icon.png"),
   characterAvatar: require("../../assets/images/icons/Character Avatar.png"),
+} as const;
+
+// --- Gear Item Icons (Phase 4, png format) ---
+
+export const gearImages = {
+  ironGauntlets: require("../../assets/images/icons/gear/Iron Gauntlets.png"),
+  apprenticeStaff: require("../../assets/images/icons/gear/Apprentice Staff.png"),
+  leatherCloak: require("../../assets/images/icons/gear/Leather Cloak.png"),
+  steelSword: require("../../assets/images/icons/gear/Steel Sword.png"),
+  chainMail: require("../../assets/images/icons/gear/Chain Mail.png"),
+  focusAmulet: require("../../assets/images/icons/gear/Focus Amulet.png"),
+  flameBlade: require("../../assets/images/icons/gear/Flame Blade.png"),
+  mithrilPlate: require("../../assets/images/icons/gear/Mithril Plate.png"),
+  shadowRing: require("../../assets/images/icons/gear/Shadow Ring.png"),
+  arcaneScepter: require("../../assets/images/icons/gear/Arcane Scepter.png"),
+  dragonScaleArmor: require("../../assets/images/icons/gear/Dragon Scale Armor.png"),
+  phoenixFeather: require("../../assets/images/icons/gear/Phoenix Feather.png"),
+} as const;
+
+// --- Stat Icons (Phase 4, png format) ---
+
+export const statImages = {
+  strength: require("../../assets/images/icons/stats/Strength Icon.png"),
+  intelligence: require("../../assets/images/icons/stats/Intelligence Icon.png"),
+  discipline: require("../../assets/images/icons/stats/Discipline Icon.png"),
+  charisma: require("../../assets/images/icons/stats/Charisma Icon.png"),
+} as const;
+
+// --- Gear Slot Placeholder Icons (Phase 4, png format) ---
+
+export const slotImages = {
+  weapon: require("../../assets/images/icons/slots/Empty Weapon Slot.png"),
+  armor: require("../../assets/images/icons/slots/Empty Armor Slot.png"),
+  accessory: require("../../assets/images/icons/slots/Empty Accessory Slot.png"),
 } as const;

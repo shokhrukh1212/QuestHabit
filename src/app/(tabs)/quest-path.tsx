@@ -14,6 +14,7 @@ import { MotiView } from "moti";
 
 import { CharacterBanner } from "@/components/ui/CharacterBanner";
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
+import { LevelUpCelebration } from "@/components/character/LevelUpCelebration";
 import { EncounterModal } from "@/components/encounter/EncounterModal";
 import { CompletionCelebration } from "@/components/encounter/CompletionCelebration";
 import { MissedHabitScene } from "@/components/quest/MissedHabitScene";
@@ -27,6 +28,7 @@ import { calculateStreak } from "@/lib/streak-utils";
 import { iconImages, sceneImages } from "@/lib/assets";
 import { useCharacterStore } from "@/stores/character-store";
 import { useHabitStore } from "@/stores/habit-store";
+import { useInventoryStore } from "@/stores/inventory-store";
 import { useQuestStore } from "@/stores/quest-store";
 import type { QuestWaypoint } from "@/types/game";
 
@@ -36,6 +38,7 @@ type ScreenState =
   | "quest_path"
   | "encounter"
   | "celebration"
+  | "level_up"
   | "campfire"
   | "summary";
 
@@ -53,6 +56,11 @@ export default function QuestPathScreen() {
 
   const addXp = useCharacterStore((s) => s.addXp);
   const incrementStat = useCharacterStore((s) => s.incrementStat);
+  const pendingLevelUp = useCharacterStore((s) => s.pendingLevelUp);
+  const clearPendingLevelUp = useCharacterStore((s) => s.clearPendingLevelUp);
+  const equipGear = useCharacterStore((s) => s.equipGear);
+
+  const addGear = useInventoryStore((s) => s.addGear);
 
   const [screenState, setScreenState] = useState<ScreenState>("quest_path");
   const [activeWaypoint, setActiveWaypoint] = useState<QuestWaypoint | null>(
@@ -122,6 +130,12 @@ export default function QuestPathScreen() {
     setCelebrationData(null);
     setActiveWaypoint(null);
 
+    // Check for level-up first — show celebration before moving on
+    if (pendingLevelUp) {
+      setScreenState("level_up");
+      return;
+    }
+
     // Check if all habits done after this completion
     const newCompletedCount = waypoints.filter(
       (wp) => wp.status === "completed",
@@ -134,7 +148,7 @@ export default function QuestPathScreen() {
     } else {
       setScreenState("quest_path");
     }
-  }, [waypoints, totalCount, addXp]);
+  }, [waypoints, totalCount, addXp, pendingLevelUp]);
 
   const handleDismissEncounter = useCallback(() => {
     setActiveWaypoint(null);
@@ -149,6 +163,36 @@ export default function QuestPathScreen() {
   const handleCampfireDone = useCallback(() => {
     setScreenState("summary");
   }, []);
+
+  const handleLevelUpDone = useCallback(() => {
+    if (pendingLevelUp?.rewardGear) {
+      // Add gear to inventory
+      addGear(pendingLevelUp.rewardGear);
+
+      // Auto-equip if slot is empty
+      const character = useCharacterStore.getState().character;
+      if (character) {
+        const slot = pendingLevelUp.rewardGear.slot;
+        if (!character.equippedGear[slot]) {
+          equipGear(pendingLevelUp.rewardGear);
+        }
+      }
+    }
+
+    clearPendingLevelUp();
+
+    // Check if all habits done — proceed to campfire or back to path
+    const newCompletedCount = waypoints.filter(
+      (wp) => wp.status === "completed",
+    ).length + 1;
+
+    if (newCompletedCount >= totalCount) {
+      addXp(PERFECT_DAY_BONUS);
+      setScreenState("campfire");
+    } else {
+      setScreenState("quest_path");
+    }
+  }, [pendingLevelUp, addGear, equipGear, clearPendingLevelUp, waypoints, totalCount, addXp]);
 
   const handleSummaryDone = useCallback(() => {
     setScreenState("quest_path");
@@ -194,6 +238,11 @@ export default function QuestPathScreen() {
         onDone={handleCelebrationDone}
       />
     );
+  }
+
+  // Level up celebration
+  if (screenState === "level_up" && pendingLevelUp) {
+    return <LevelUpCelebration levelUp={pendingLevelUp} onDone={handleLevelUpDone} />;
   }
 
   // Campfire celebration (all done)

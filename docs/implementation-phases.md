@@ -1,58 +1,58 @@
 ## IMPLEMENTATION PHASES (FOR implementation-phases.md)
 
-### Phase 1: Foundation (Week 1-2)
+### Phase 1: Foundation (Week 1-2) ✅ COMPLETE
 
 **Goal: Project setup + database + core navigation**
 
-- [ ] Initialize Expo project with TypeScript
-- [ ] Install and configure all dependencies
-- [ ] Set up NativeWind (Tailwind)
-- [ ] Set up Supabase project (local + remote)
-- [ ] Design and create database schema (users, characters, habits, completions, streaks)
-- [ ] Set up Expo Router with tab navigation structure
-- [ ] Create base UI components (buttons, cards, modals, RPG dialogue box)
-- [ ] Create design token constants (colors, spacing, typography)
-- [ ] Set up Zustand stores (auth, character, quest)
-- [ ] Set up TanStack Query with Supabase
+- [x] Initialize Expo project with TypeScript
+- [x] Install and configure all dependencies
+- [x] Set up NativeWind (Tailwind)
+- [x] Set up Supabase project (local + remote)
+- [x] Design and create database schema (users, characters, habits, completions, streaks)
+- [x] Set up Expo Router with tab navigation structure
+- [x] Create base UI components (buttons, cards, modals, RPG dialogue box)
+- [x] Create design token constants (colors, spacing, typography)
+- [x] Set up Zustand stores (auth, character, quest)
+- [x] Set up TanStack Query with Supabase
 
-### Phase 2: The Prologue (Week 2-3)
+### Phase 2: The Prologue (Week 2-3) ✅ COMPLETE
 
 **Goal: First-time user experience — 90-second playable onboarding**
 
-- [ ] P.1 Cave Awakening screen
-- [ ] P.2 Character Mirror (character creation)
-- [ ] P.3 Path Fork (class selection)
-- [ ] P.4-P.6 Habit setting obstacles (3 screens)
-- [ ] P.7 Cave Exit / World Reveal
-- [ ] Local storage for anonymous play (no auth required)
-- [ ] Prologue → Quest Path transition logic
+- [x] P.1 Cave Awakening screen
+- [x] P.2 Character Mirror (character creation)
+- [x] P.3 Path Fork (class selection)
+- [x] P.4-P.6 Habit setting obstacles (3 screens)
+- [x] P.7 Cave Exit / World Reveal
+- [x] Local storage for anonymous play (no auth required)
+- [x] Prologue → Quest Path transition logic
 
-### Phase 3: Daily Core Loop (Week 3-5)
+### Phase 3: Daily Core Loop (Week 3-5) ✅ COMPLETE
 
 **Goal: The screen users see every day**
 
-- [ ] D.1 Quest Path (the main daily screen — MOST IMPORTANT)
-- [ ] D.2 Encounter Tap (habit confirmation modal)
-- [ ] D.3 Completion Animation
-- [ ] D.4 Missed Habit (mid-path night scene)
-- [ ] D.5 Daily Summary
-- [ ] D.6 Campfire Celebration (perfect day)
-- [ ] XP calculation engine
-- [ ] Streak tracking logic
-- [ ] Daily reset logic (midnight local time)
+- [x] D.1 Quest Path (the main daily screen — MOST IMPORTANT)
+- [x] D.2 Encounter Tap (habit confirmation modal)
+- [x] D.3 Completion Animation
+- [x] D.4 Missed Habit (mid-path night scene)
+- [x] D.5 Daily Summary
+- [x] D.6 Campfire Celebration (perfect day)
+- [x] XP calculation engine
+- [x] Streak tracking logic
+- [x] Daily reset logic (midnight local time)
 - [ ] Push notifications for quest reminders
 
-### Phase 4: Character System (Week 5-6)
+### Phase 4: Character System (Week 5-6) ✅ COMPLETE
 
 **Goal: RPG character progression**
 
-- [ ] C.1 Character Profile screen
-- [ ] C.2 Inventory / Gear Grid
-- [ ] C.3 Level Up Celebration (full-screen)
-- [ ] C.4 Stat Detail drill-down
-- [ ] Stat growth calculations (habits → stats)
-- [ ] Gear system (equip/unequip, rarity, stat bonuses)
-- [ ] Level progression curve (XP thresholds)
+- [x] C.1 Character Profile screen
+- [x] C.2 Inventory / Gear Grid
+- [x] C.3 Level Up Celebration (full-screen)
+- [x] C.4 Stat Detail drill-down
+- [x] Stat growth calculations (habits → stats)
+- [x] Gear system (equip/unequip, rarity, stat bonuses)
+- [x] Level progression curve (XP thresholds)
 
 ### Phase 5: Authentication (Week 6-7)
 

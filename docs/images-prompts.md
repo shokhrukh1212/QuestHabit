@@ -280,3 +280,148 @@ Pixel art icon of an ethereal shadow siren figure with purple and red dark energ
 All other existing images: keep current sizes, no changes needed.
 
 ---
+
+# Phase 4: Character System Assets
+
+> Assets for the C.1–C.4 Character System screens.
+> Gear items use Ionicons as temporary placeholders until these are generated.
+
+---
+
+## Scene Images
+
+### 25. C.3 — Level Up Celebration Background
+
+Size: 750 × 500 px
+Save to: `assets/images/scenes/Level Up Celebration.webp`
+
+Pixel art golden radial burst effect, center of image has bright golden light expanding outward with energy particles, golden and orange rays radiating from center, small sparkles and pixel particles scattered throughout, triumphant and powerful atmosphere, dark background (#000000) with the golden explosion as focal point, 8-bit retro RPG style, gold and orange color palette
+
+---
+
+## Gear Item Icons
+
+Size: 128 × 128 px each, transparent background, PNG format
+Save to: `assets/images/icons/gear/`
+
+All prompts share this base style:
+**Base style:** "Pixel art game item icon, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon"
+
+### 26. Iron Gauntlets (Common Armor)
+
+Pixel art iron gauntlets icon, pair of dark grey metal gauntlets with rivets, slight red-brown tint, common quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 27. Apprentice Staff (Common Weapon)
+
+Pixel art wooden staff icon with small blue crystal at the top, natural brown wood grain, faint blue glow from crystal, common quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 28. Leather Cloak (Common Accessory)
+
+Pixel art brown leather cloak icon, simple traveling cloak with clasp, brown and tan colors, common quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 29. Steel Sword (Uncommon Weapon)
+
+Pixel art polished steel sword icon, straight blade with slight green glow, cross-guard with gem, uncommon quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 30. Chain Mail (Uncommon Armor)
+
+Pixel art chain mail armor icon, interlocking metal rings forming a chest piece, silver metallic sheen with green accent, uncommon quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 31. Focus Amulet (Uncommon Accessory)
+
+Pixel art amulet icon with purple gem pendant on gold chain, faint purple glow around the gem, uncommon quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 32. Flame Blade (Rare Weapon)
+
+Pixel art sword icon wreathed in orange-red flames, the blade itself is dark steel with fire engulfing it, dynamic flame particles, rare quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 33. Mithril Plate (Rare Armor)
+
+Pixel art gleaming silver plate armor icon, mythical mithril material with blue-white shine, intricate engraving details, rare quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 34. Shadow Ring (Rare Accessory)
+
+Pixel art dark ring icon with purple mist emanating from it, black band with embedded purple gemstone, mysterious and dark aura, rare quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 35. Arcane Scepter (Epic Weapon)
+
+Pixel art ornate magical scepter icon, crackling with purple energy and lightning effects, golden shaft with large glowing purple crystal at top, epic quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 36. Dragon Scale Armor (Epic Armor)
+
+Pixel art dragon scale chest armor icon, dark green and gold interlocking scales, faint purple magical glow between scales, imposing and regal, epic quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+### 37. Phoenix Feather (Epic Accessory)
+
+Pixel art glowing golden feather icon with orange-red fire particles trailing from tip, luminous and ethereal, golden and orange gradient, epic quality RPG item, centered, 8-bit retro RPG style, clean pixel art, transparent background, game UI inventory icon
+
+---
+
+## Stat Icons
+
+Size: 128 × 128 px each, transparent background, PNG format
+Save to: `assets/images/icons/stats/`
+
+### 38. Strength Icon
+
+Pixel art red flexing arm / fist icon, bold and powerful, red color (#E74C3C), 8-bit retro RPG style, clean pixel art, transparent background, game UI stat icon
+
+### 39. Intelligence Icon
+
+Pixel art blue open book icon with glowing pages, knowledge and wisdom symbol, blue color (#3498DB), 8-bit retro RPG style, clean pixel art, transparent background, game UI stat icon
+
+### 40. Discipline Icon
+
+Pixel art purple shield icon with chain links, willpower and defense symbol, purple color (#6C5CE7), 8-bit retro RPG style, clean pixel art, transparent background, game UI stat icon
+
+### 41. Charisma Icon
+
+Pixel art green speech bubble / crown icon, social influence symbol, green color (#2ECC71), 8-bit retro RPG style, clean pixel art, transparent background, game UI stat icon
+
+---
+
+## Gear Slot Placeholder Icons
+
+Size: 64 × 64 px each, transparent background, PNG format
+Save to: `assets/images/icons/slots/`
+
+### 42. Empty Weapon Slot
+
+Pixel art faded grey sword outline icon, empty slot placeholder, muted grey (#3A3A5E), minimal detail, 8-bit retro RPG style, transparent background
+
+### 43. Empty Armor Slot
+
+Pixel art faded grey chest plate outline icon, empty slot placeholder, muted grey (#3A3A5E), minimal detail, 8-bit retro RPG style, transparent background
+
+### 44. Empty Accessory Slot
+
+Pixel art faded grey ring outline icon, empty slot placeholder, muted grey (#3A3A5E), minimal detail, 8-bit retro RPG style, transparent background
+
+---
+
+## Summary of Phase 4 Assets
+
+| # | Name | Size | Format | Save To |
+|---|------|------|--------|---------|
+| 25 | Level Up Celebration BG | 750×500 | WEBP | scenes/Level Up Celebration.webp |
+| 26 | Iron Gauntlets | 128×128 | PNG, transparent bg | icons/gear/iron-gauntlets.png |
+| 27 | Apprentice Staff | 128×128 | PNG, transparent bg | icons/gear/apprentice-staff.png |
+| 28 | Leather Cloak | 128×128 | PNG, transparent bg | icons/gear/leather-cloak.png |
+| 29 | Steel Sword | 128×128 | PNG, transparent bg | icons/gear/steel-sword.png |
+| 30 | Chain Mail | 128×128 | PNG, transparent bg | icons/gear/chain-mail.png |
+| 31 | Focus Amulet | 128×128 | PNG, transparent bg | icons/gear/focus-amulet.png |
+| 32 | Flame Blade | 128×128 | PNG, transparent bg | icons/gear/flame-blade.png |
+| 33 | Mithril Plate | 128×128 | PNG, transparent bg | icons/gear/mithril-plate.png |
+| 34 | Shadow Ring | 128×128 | PNG, transparent bg | icons/gear/shadow-ring.png |
+| 35 | Arcane Scepter | 128×128 | PNG, transparent bg | icons/gear/arcane-scepter.png |
+| 36 | Dragon Scale Armor | 128×128 | PNG, transparent bg | icons/gear/dragon-scale-armor.png |
+| 37 | Phoenix Feather | 128×128 | PNG, transparent bg | icons/gear/phoenix-feather.png |
+| 38 | Strength Icon | 128×128 | PNG, transparent bg | icons/stats/strength.png |
+| 39 | Intelligence Icon | 128×128 | PNG, transparent bg | icons/stats/intelligence.png |
+| 40 | Discipline Icon | 128×128 | PNG, transparent bg | icons/stats/discipline.png |
+| 41 | Charisma Icon | 128×128 | PNG, transparent bg | icons/stats/charisma.png |
+| 42 | Empty Weapon Slot | 64×64 | PNG, transparent bg | icons/slots/weapon-empty.png |
+| 43 | Empty Armor Slot | 64×64 | PNG, transparent bg | icons/slots/armor-empty.png |
+| 44 | Empty Accessory Slot | 64×64 | PNG, transparent bg | icons/slots/accessory-empty.png |
+
+---

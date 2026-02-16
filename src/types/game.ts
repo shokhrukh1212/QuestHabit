@@ -43,6 +43,8 @@ export interface GearItem {
   rarity: Rarity;
   statBonuses: Partial<CharacterStats>;
   iconKey: string;
+  /** How this gear was earned (e.g., "Level 2 Reward"). */
+  source?: string;
 }
 
 export type GearSlot = "weapon" | "armor" | "accessory";
