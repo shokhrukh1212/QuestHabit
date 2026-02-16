@@ -3,13 +3,14 @@
  * Design ref: designs/Third Obstacle - Third Habit.png
  *
  * Siren/shadow figure. Purple/pink atmospheric glow.
- * Different frequency options: Daily / Weekly / Monthly.
+ * Standardized frequency options matching P.4 and P.5.
  * ProgressDots 3/3 (all green on completion).
  */
 
 import { useCallback, useState } from "react";
-import { Keyboard, Text, View } from "react-native";
+import { Keyboard, View } from "react-native";
 import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import { router } from "expo-router";
 
@@ -27,11 +28,12 @@ import { sceneImages } from "@/lib/assets";
 import { usePrologueStore } from "@/stores/prologue-store";
 import type { HabitFrequency } from "@/types/game";
 
-// Different frequency options for discipline habits (per design)
+// Standardized frequency options — same across all 3 obstacles
 const FREQUENCY_OPTIONS: FrequencyOption[] = [
   { label: "Daily", value: "daily" },
-  { label: "Weekly", value: "weekly" },
-  { label: "Monthly", value: "monthly" },
+  { label: "5x/week", value: "5x_week" },
+  { label: "4x/week", value: "4x_week" },
+  { label: "3x/week", value: "3x_week" },
 ];
 
 const DIALOGUE =
@@ -65,18 +67,22 @@ export default function ThirdObstacle() {
   return (
     <ScreenWrapper bgColor="#0D0D1A" fullScreen withKeyboardAvoidance>
       <View className="flex-1 justify-end pb-8">
-        {/* Scene illustration — purple/pink themed */}
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        {/* Scene illustration — purple/pink themed, full-width */}
+        <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
           <Image
             source={sceneImages.shadowSiren}
-            style={{ width: 280, height: 200 }}
-            contentFit="contain"
+            style={{ width: "100%", height: 260 }}
+            contentFit="cover"
+          />
+          <LinearGradient
+            colors={["transparent", "#0D0D1A"]}
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 60,
+            }}
           />
           {showXp && (
             <FloatingXPText amount={50} onComplete={handleXpComplete} />

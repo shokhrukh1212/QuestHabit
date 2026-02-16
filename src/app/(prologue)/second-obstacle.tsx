@@ -8,8 +8,9 @@
  */
 
 import { useCallback, useState } from "react";
-import { Keyboard, Text, View } from "react-native";
+import { Keyboard, View } from "react-native";
 import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import { MotiView } from "moti";
 import { router } from "expo-router";
 
@@ -65,18 +66,22 @@ export default function SecondObstacle() {
   return (
     <ScreenWrapper bgColor="#0D0D1A" fullScreen withKeyboardAvoidance>
       <View className="flex-1 justify-end pb-8">
-        {/* Scene illustration — blue/cyan themed */}
-        <View
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        {/* Scene illustration — blue/cyan themed, full-width */}
+        <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
           <Image
             source={sceneImages.scrollPedestal}
-            style={{ width: 280, height: 200 }}
-            contentFit="contain"
+            style={{ width: "100%", height: 260 }}
+            contentFit="cover"
+          />
+          <LinearGradient
+            colors={["transparent", "#0D0D1A"]}
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 60,
+            }}
           />
           {showXp && (
             <FloatingXPText amount={50} onComplete={handleXpComplete} />

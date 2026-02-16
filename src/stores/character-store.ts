@@ -29,6 +29,8 @@ interface CharacterActions {
   addXp: (amount: number) => boolean;
   setLevel: (level: number) => void;
   updateStats: (stats: Partial<CharacterStats>) => void;
+  /** Increment a single stat by a delta (reads current value inside updater to avoid stale closures). */
+  incrementStat: (stat: keyof CharacterStats, delta: number) => void;
   /** Initialize character from prologue data (one-time). */
   initFromPrologue: (
     name: string,
@@ -96,6 +98,20 @@ export const useCharacterStore = create<
             character: {
               ...state.character,
               stats: { ...state.character.stats, ...stats },
+            },
+          };
+        }),
+
+      incrementStat: (stat, delta) =>
+        set((state) => {
+          if (!state.character) return state;
+          return {
+            character: {
+              ...state.character,
+              stats: {
+                ...state.character.stats,
+                [stat]: state.character.stats[stat] + delta,
+              },
             },
           };
         }),

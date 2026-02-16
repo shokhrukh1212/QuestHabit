@@ -4,11 +4,10 @@
  *
  * Full-screen overlay after confirming habit completion.
  * Shows "+50 XP", stat bonus, streak count.
- * Auto-dismisses after ~2.5s.
+ * User taps to continue (no auto-dismiss).
  */
 
-import { useEffect } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { Image, type ImageSource } from "expo-image";
 import { MotiView } from "moti";
 
@@ -34,13 +33,9 @@ export function CompletionCelebration({
 }: CompletionCelebrationProps) {
   const { xpIntoLevel, xpNeeded } = useXpProgress();
 
-  useEffect(() => {
-    const timer = setTimeout(onDone, 2500);
-    return () => clearTimeout(timer);
-  }, [onDone]);
-
   return (
-    <View
+    <Pressable
+      onPress={onDone}
       style={{
         flex: 1,
         backgroundColor: "#000000",
@@ -98,12 +93,12 @@ export function CompletionCelebration({
               fontWeight: "700",
             }}
           >
-            🔥 {streak} day streak
+            {streak} day streak
           </Text>
         )}
       </MotiView>
 
-      {/* Completion scene illustration */}
+      {/* Completion scene illustration — larger */}
       {completionScene && (
         <MotiView
           from={{ scale: 0.8, opacity: 0 }}
@@ -112,11 +107,34 @@ export function CompletionCelebration({
         >
           <Image
             source={completionScene}
-            style={{ width: 300, height: 220 }}
+            style={{ width: 340, height: 250 }}
             contentFit="contain"
           />
         </MotiView>
       )}
+
+      {/* "Tap to continue" hint — fades in after a delay */}
+      <MotiView
+        from={{ opacity: 0 }}
+        animate={{ opacity: 0.6 }}
+        transition={{ type: "timing", duration: 800, delay: 1500 }}
+        style={{
+          position: "absolute",
+          bottom: 80,
+          left: 24,
+          right: 24,
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            color: "#B0B0C0",
+            fontSize: 14,
+          }}
+        >
+          Tap to continue
+        </Text>
+      </MotiView>
 
       {/* XP bar at bottom */}
       <MotiView
@@ -125,7 +143,7 @@ export function CompletionCelebration({
         transition={{ type: "timing", duration: 600, delay: 600 }}
         style={{
           position: "absolute",
-          bottom: 60,
+          bottom: 50,
           left: 24,
           right: 24,
         }}
@@ -137,6 +155,6 @@ export function CompletionCelebration({
           color="#2ECC71"
         />
       </MotiView>
-    </View>
+    </Pressable>
   );
 }

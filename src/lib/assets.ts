@@ -23,6 +23,19 @@ export const sceneImages = {
 
 // --- Icons (small, png format) ---
 
+// --- Hairstyle Icons (character mirror, png format) ---
+
+export const hairstyleImages = {
+  shortSpiky: require("../../assets/hairystyles/Short Spiky.png"),
+  mediumWavy: require("../../assets/hairystyles/Medium Wavy.png"),
+  longStraight: require("../../assets/hairystyles/Long Straight.png"),
+  buzzCut: require("../../assets/hairystyles/Buzz Cut.png"),
+  ponytail: require("../../assets/hairystyles/Ponytail.png"),
+  braided: require("../../assets/hairystyles/Braided.png"),
+} as const;
+
+// --- Icons (small, png format) ---
+
 export const iconImages = {
   ironGate: require("../../assets/images/icons/Iron Gate Icon.png"),
   scroll: require("../../assets/images/icons/Glowing Scroll Icon.png"),

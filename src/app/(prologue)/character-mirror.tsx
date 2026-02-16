@@ -3,26 +3,33 @@
  * Design ref: designs/Character Mirror (Customization).png
  *
  * Large oval mirror with purple glow + shimmer animation.
- * Skin tone circles, hair style thumbnails (scrollable), hair color circles.
+ * Skin tone circles, hair style pixel-art thumbnails (scrollable), hair color circles.
  * Character preview updates in real-time.
  */
 
 import { useCallback } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { Image } from "expo-image";
+import { Image, type ImageSource } from "expo-image";
 import { MotiView } from "moti";
 import { router } from "expo-router";
 
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
 import { StoneButton } from "@/components/ui/StoneButton";
-import { sceneImages } from "@/lib/assets";
+import { hairstyleImages, sceneImages } from "@/lib/assets";
 import { usePrologueStore } from "@/stores/prologue-store";
 
 // --- Option data ---
 
 const SKIN_TONES = ["#F5D0A9", "#D2A679", "#A0724A", "#6B4226", "#3B2010"];
 
-const HAIR_STYLES = ["🧑", "👩", "🧑‍🦱", "👩‍🦳", "🧑‍🦰", "👩‍🦲"];
+const HAIR_STYLES: { label: string; source: ImageSource }[] = [
+  { label: "Spiky", source: hairstyleImages.shortSpiky },
+  { label: "Wavy", source: hairstyleImages.mediumWavy },
+  { label: "Long", source: hairstyleImages.longStraight },
+  { label: "Buzz", source: hairstyleImages.buzzCut },
+  { label: "Ponytail", source: hairstyleImages.ponytail },
+  { label: "Braided", source: hairstyleImages.braided },
+];
 
 const HAIR_COLORS = ["#FFD700", "#D4E157", "#DC143C", "#C2185B"];
 
@@ -60,8 +67,8 @@ export default function CharacterMirror() {
           Who are you? What do you look like?
         </Text>
 
-        {/* Mirror with shimmer */}
-        <View style={{ alignItems: "center", marginBottom: 32 }}>
+        {/* Mirror with shimmer — larger */}
+        <View style={{ alignItems: "center", marginBottom: 28 }}>
           <MotiView
             from={{ opacity: 0.6 }}
             animate={{ opacity: 1 }}
@@ -69,9 +76,9 @@ export default function CharacterMirror() {
           >
             <View
               style={{
-                width: 200,
-                height: 240,
-                borderRadius: 100,
+                width: 240,
+                height: 300,
+                borderRadius: 120,
                 borderWidth: 3,
                 borderColor: "#6C5CE7",
                 backgroundColor: "#1A1A2E",
@@ -85,24 +92,23 @@ export default function CharacterMirror() {
                 elevation: 10,
               }}
             >
-              {/* Character preview — mirror scene */}
               <Image
                 source={sceneImages.characterMirror}
-                style={{ width: 160, height: 180 }}
-                contentFit="contain"
+                style={{ width: 240, height: 300 }}
+                contentFit="cover"
               />
             </View>
           </MotiView>
         </View>
 
         {/* Skin tone selection */}
-        <SectionLabel text="Skin Tone" />
+        <SectionLabel text="Your skin" />
         <View
           style={{
             flexDirection: "row",
             justifyContent: "center",
             gap: 14,
-            marginBottom: 24,
+            marginBottom: 20,
           }}
         >
           {SKIN_TONES.map((color, i) => (
@@ -115,47 +121,53 @@ export default function CharacterMirror() {
           ))}
         </View>
 
-        {/* Hair style selection */}
-        <SectionLabel text="Hair Style" />
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingHorizontal: 24,
-            gap: 12,
-            marginBottom: 24,
-          }}
-        >
-          {HAIR_STYLES.map((emoji, i) => (
-            <Pressable
-              key={`hair-${i}`}
-              onPress={() => setAppearance({ hairStyle: i })}
-              style={{
-                width: 56,
-                height: 56,
-                borderRadius: 12,
-                backgroundColor:
-                  appearance.hairStyle === i ? "#6C5CE7" : "#1A1A2E",
-                borderWidth: 2,
-                borderColor:
-                  appearance.hairStyle === i ? "#8B7CF7" : "#3A3A5E",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ fontSize: 28 }}>{emoji}</Text>
-            </Pressable>
-          ))}
-        </ScrollView>
+        {/* Hair style selection — pixel-art icons */}
+        <SectionLabel text="Your hair" />
+        <View style={{ marginBottom: 20 }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: 24,
+              gap: 12,
+            }}
+          >
+            {HAIR_STYLES.map((style, i) => (
+              <Pressable
+                key={`hair-${i}`}
+                onPress={() => setAppearance({ hairStyle: i })}
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 12,
+                  backgroundColor:
+                    appearance.hairStyle === i ? "#6C5CE7" : "#1A1A2E",
+                  borderWidth: 2,
+                  borderColor:
+                    appearance.hairStyle === i ? "#8B7CF7" : "#3A3A5E",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                }}
+              >
+                <Image
+                  source={style.source}
+                  style={{ width: 40, height: 40 }}
+                  contentFit="contain"
+                />
+              </Pressable>
+            ))}
+          </ScrollView>
+        </View>
 
         {/* Hair color selection */}
-        <SectionLabel text="Hair Color" />
+        <SectionLabel text="Your hair color" />
         <View
           style={{
             flexDirection: "row",
             justifyContent: "center",
             gap: 14,
-            marginBottom: 32,
+            marginBottom: 28,
           }}
         >
           {HAIR_COLORS.map((color, i) => (
@@ -184,12 +196,11 @@ function SectionLabel({ text }: { text: string }) {
     <Text
       style={{
         color: "#B0B0C0",
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: "600",
-        textTransform: "uppercase",
-        letterSpacing: 1,
         textAlign: "center",
         marginBottom: 12,
+        marginTop: 4,
       }}
     >
       {text}
