@@ -7,6 +7,7 @@
  */
 
 import { Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
@@ -92,7 +93,11 @@ export function DailySummary({ onDone }: DailySummaryProps) {
                     gap: 12,
                   }}
                 >
-                  <Text style={{ fontSize: 20 }}>{narrative.icon}</Text>
+                  <Image
+                    source={narrative.icon}
+                    style={{ width: 24, height: 24 }}
+                    contentFit="contain"
+                  />
                   <Text
                     style={{
                       flex: 1,
@@ -103,8 +108,14 @@ export function DailySummary({ onDone }: DailySummaryProps) {
                   >
                     {wp.habit.name}
                   </Text>
-                  <Text style={{ fontSize: 18 }}>
-                    {done ? "✅" : "❌"}
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "700",
+                      color: done ? "#2ECC71" : "#E74C3C",
+                    }}
+                  >
+                    {done ? "\u2714" : "\u2718"}
                   </Text>
                 </View>
               );

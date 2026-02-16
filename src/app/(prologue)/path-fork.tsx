@@ -8,10 +8,12 @@
 
 import { useCallback, useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 import { router } from "expo-router";
 
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
+import { sceneImages } from "@/lib/assets";
 import { usePrologueStore } from "@/stores/prologue-store";
 import type { CharacterClass } from "@/types/game";
 
@@ -71,7 +73,16 @@ export default function PathFork() {
 
   return (
     <ScreenWrapper bgColor="#0D0D1A" fullScreen>
-      <View className="flex-1 justify-center px-4">
+      <View className="flex-1 justify-end px-4 pb-12">
+        {/* Scene illustration */}
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <Image
+            source={sceneImages.pathFork}
+            style={{ width: 300, height: 220 }}
+            contentFit="contain"
+          />
+        </View>
+
         {/* Title dialogue */}
         <Text
           style={{

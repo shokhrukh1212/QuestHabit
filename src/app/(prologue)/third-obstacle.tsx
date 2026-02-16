@@ -9,6 +9,7 @@
 
 import { useCallback, useState } from "react";
 import { Keyboard, Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 import { router } from "expo-router";
 
@@ -22,6 +23,7 @@ import { RPGDialogueBox } from "@/components/ui/RPGDialogueBox";
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
 import { StoneButton } from "@/components/ui/StoneButton";
 import { StoneTabletInput } from "@/components/ui/StoneTabletInput";
+import { sceneImages } from "@/lib/assets";
 import { usePrologueStore } from "@/stores/prologue-store";
 import type { HabitFrequency } from "@/types/game";
 
@@ -71,7 +73,11 @@ export default function ThirdObstacle() {
             justifyContent: "center",
           }}
         >
-          <Text style={{ fontSize: 80 }}>🛡️</Text>
+          <Image
+            source={sceneImages.shadowSiren}
+            style={{ width: 280, height: 200 }}
+            contentFit="contain"
+          />
           {showXp && (
             <FloatingXPText amount={50} onComplete={handleXpComplete} />
           )}

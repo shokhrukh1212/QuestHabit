@@ -8,6 +8,7 @@
  */
 
 import { Pressable, Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 
 import { StoneButton } from "@/components/ui/StoneButton";
@@ -55,7 +56,11 @@ export function EncounterModal({
         }}
       >
         {/* Encounter icon */}
-        <Text style={{ fontSize: 56, marginBottom: 20 }}>{narrative.icon}</Text>
+        <Image
+          source={narrative.icon}
+          style={{ width: 96, height: 96, marginBottom: 20 }}
+          contentFit="contain"
+        />
 
         {/* Narrative text */}
         <Text

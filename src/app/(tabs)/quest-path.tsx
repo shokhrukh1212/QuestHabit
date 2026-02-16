@@ -9,6 +9,7 @@
 
 import { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 
 import { CharacterBanner } from "@/components/ui/CharacterBanner";
@@ -23,6 +24,7 @@ import { useDailyReset } from "@/hooks/useDailyReset";
 import { BASE_XP_PER_HABIT, PERFECT_DAY_BONUS } from "@/lib/game-rules";
 import { getNarrative } from "@/lib/narrative-text";
 import { calculateStreak } from "@/lib/streak-utils";
+import { iconImages } from "@/lib/assets";
 import { useCharacterStore } from "@/stores/character-store";
 import { useHabitStore } from "@/stores/habit-store";
 import { useQuestStore } from "@/stores/quest-store";
@@ -62,6 +64,7 @@ export default function QuestPathScreen() {
     statName: string;
     statBonus: number;
     streak: number;
+    completionScene: ReturnType<typeof getNarrative>["completionScene"];
   } | null>(null);
 
   // Show missed scene on first load if yesterday was incomplete
@@ -110,7 +113,8 @@ export default function QuestPathScreen() {
       xp: BASE_XP_PER_HABIT,
       statName: narrative.statName,
       statBonus: narrative.statBonus,
-      streak: streak.current + 1, // +1 because we just completed
+      streak: streak.current + 1,
+      completionScene: narrative.completionScene,
     });
     setScreenState("celebration");
   }, [activeWaypoint, completeHabit, completeWaypoint, addXp, updateStats, character, events]);
@@ -187,6 +191,7 @@ export default function QuestPathScreen() {
         statName={celebrationData.statName}
         statBonus={celebrationData.statBonus}
         streak={celebrationData.streak}
+        completionScene={celebrationData.completionScene}
         onDone={handleCelebrationDone}
       />
     );
@@ -222,7 +227,11 @@ export default function QuestPathScreen() {
         >
           {/* Character at start */}
           <View style={{ alignItems: "center", width: 50 }}>
-            <Text style={{ fontSize: 32 }}>🧙</Text>
+            <Image
+              source={iconImages.characterAvatar}
+              style={{ width: 40, height: 40 }}
+              contentFit="contain"
+            />
           </View>
 
           {/* Path segments + waypoints */}
@@ -266,7 +275,11 @@ export default function QuestPathScreen() {
             transition={{ type: "timing", duration: 1000, loop: !allDone }}
             style={{ alignItems: "center", width: 50 }}
           >
-            <Text style={{ fontSize: 32 }}>🔥</Text>
+            <Image
+              source={iconImages.campfire}
+              style={{ width: 40, height: 40 }}
+              contentFit="contain"
+            />
           </MotiView>
         </ScrollView>
 

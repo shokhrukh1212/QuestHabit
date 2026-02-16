@@ -9,6 +9,7 @@
 
 import { useEffect } from "react";
 import { Text, View } from "react-native";
+import { Image, type ImageSource } from "expo-image";
 import { MotiView } from "moti";
 
 import { XPBar } from "@/components/ui/XPBar";
@@ -19,6 +20,7 @@ interface CompletionCelebrationProps {
   statName: string;
   statBonus: number;
   streak: number;
+  completionScene?: ImageSource;
   onDone: () => void;
 }
 
@@ -27,6 +29,7 @@ export function CompletionCelebration({
   statName,
   statBonus,
   streak,
+  completionScene,
   onDone,
 }: CompletionCelebrationProps) {
   const { xpIntoLevel, xpNeeded } = useXpProgress();
@@ -100,14 +103,20 @@ export function CompletionCelebration({
         )}
       </MotiView>
 
-      {/* Scene placeholder */}
-      <MotiView
-        from={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "timing", duration: 500, delay: 200 }}
-      >
-        <Text style={{ fontSize: 80 }}>⚡</Text>
-      </MotiView>
+      {/* Completion scene illustration */}
+      {completionScene && (
+        <MotiView
+          from={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "timing", duration: 500, delay: 200 }}
+        >
+          <Image
+            source={completionScene}
+            style={{ width: 300, height: 220 }}
+            contentFit="contain"
+          />
+        </MotiView>
+      )}
 
       {/* XP bar at bottom */}
       <MotiView

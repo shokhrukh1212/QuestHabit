@@ -5,6 +5,7 @@
  */
 
 import { Pressable, Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 
 import { getNarrative } from "@/lib/narrative-text";
@@ -79,7 +80,11 @@ export function QuestWaypointNode({
         {isCompleted ? (
           <Text style={{ fontSize: 22, color: "#FFFFFF" }}>✓</Text>
         ) : (
-          <Text style={{ fontSize: 24 }}>{narrative.icon}</Text>
+          <Image
+            source={narrative.icon}
+            style={{ width: 32, height: 32 }}
+            contentFit="contain"
+          />
         )}
       </MotiView>
 

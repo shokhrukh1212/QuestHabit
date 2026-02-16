@@ -8,10 +8,12 @@
  */
 
 import { Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
 import { StoneButton } from "@/components/ui/StoneButton";
+import { sceneImages } from "@/lib/assets";
 import { useCharacterStore } from "@/stores/character-store";
 
 interface MissedHabitSceneProps {
@@ -36,36 +38,18 @@ export function MissedHabitScene({ onDismiss }: MissedHabitSceneProps) {
             alignItems: "center",
           }}
         >
-          {/* Stars */}
+          {/* Full missed habit night scene */}
           <MotiView
-            from={{ opacity: 0.3 }}
+            from={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ type: "timing", duration: 2000, loop: true }}
-            style={{ position: "absolute", top: "15%" }}
-          >
-            <Text style={{ fontSize: 12, color: "#FFFFFF" }}>✦ ✧ ✦</Text>
-          </MotiView>
-
-          {/* Moon */}
-          <MotiView
-            from={{ opacity: 0.7 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "timing", duration: 3000, loop: true }}
-            style={{ position: "absolute", top: "10%", right: "20%" }}
-          >
-            <Text style={{ fontSize: 40 }}>🌙</Text>
-          </MotiView>
-
-          {/* Character by campfire */}
-          <MotiView
-            from={{ opacity: 0, translateY: 20 }}
-            animate={{ opacity: 1, translateY: 0 }}
             transition={{ type: "timing", duration: 1000 }}
+            style={{ width: "100%", height: "100%" }}
           >
-            <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 16 }}>
-              <Text style={{ fontSize: 48 }}>🧙</Text>
-              <Text style={{ fontSize: 36 }}>🔥</Text>
-            </View>
+            <Image
+              source={sceneImages.missedHabitNight}
+              style={{ width: "100%", height: "100%" }}
+              contentFit="cover"
+            />
           </MotiView>
         </View>
 

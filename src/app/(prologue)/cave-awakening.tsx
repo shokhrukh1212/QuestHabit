@@ -2,19 +2,21 @@
  * P.1 — Cave Awakening
  * Design ref: designs/Cave Awakening.png
  *
- * Pure black background. Pixel-art character with breathing animation.
+ * Pure black background. Pixel-art scene with breathing animation.
  * RPG dialogue box with typing effect. "Tap to stand up" button with pulse.
  * ZERO app chrome.
  */
 
 import { useCallback, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 import { router } from "expo-router";
 
 import { RPGDialogueBox } from "@/components/ui/RPGDialogueBox";
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
 import { StoneButton } from "@/components/ui/StoneButton";
+import { sceneImages } from "@/lib/assets";
 import { usePrologueStore } from "@/stores/prologue-store";
 
 const DIALOGUE_TEXT =
@@ -32,7 +34,7 @@ export default function CaveAwakening() {
   return (
     <ScreenWrapper bgColor="#000000" fullScreen>
       <View className="flex-1 justify-center items-center">
-        {/* Character sprite with breathing/idle animation */}
+        {/* Scene illustration with breathing animation */}
         <MotiView
           from={{ scale: 0.95, opacity: 0.8 }}
           animate={{ scale: 1.05, opacity: 1 }}
@@ -43,17 +45,11 @@ export default function CaveAwakening() {
           }}
           style={{ marginBottom: 40 }}
         >
-          {/* Placeholder pixel character — purple-toned mysterious figure */}
-          <View
-            style={{
-              width: 80,
-              height: 80,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={{ fontSize: 64 }}>🧙</Text>
-          </View>
+          <Image
+            source={sceneImages.caveAwakening}
+            style={{ width: 280, height: 200 }}
+            contentFit="contain"
+          />
         </MotiView>
 
         {/* Dialogue box */}

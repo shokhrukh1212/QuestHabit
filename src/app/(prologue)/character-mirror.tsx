@@ -9,11 +9,13 @@
 
 import { useCallback } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
+import { Image } from "expo-image";
 import { MotiView } from "moti";
 import { router } from "expo-router";
 
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
 import { StoneButton } from "@/components/ui/StoneButton";
+import { sceneImages } from "@/lib/assets";
 import { usePrologueStore } from "@/stores/prologue-store";
 
 // --- Option data ---
@@ -83,21 +85,11 @@ export default function CharacterMirror() {
                 elevation: 10,
               }}
             >
-              {/* Character preview — updates based on selections */}
-              <Text style={{ fontSize: 64 }}>
-                {HAIR_STYLES[appearance.hairStyle] ?? "🧑"}
-              </Text>
-              <View
-                style={{
-                  position: "absolute",
-                  bottom: 30,
-                  width: 40,
-                  height: 40,
-                  borderRadius: 20,
-                  backgroundColor:
-                    SKIN_TONES[appearance.skinTone] ?? SKIN_TONES[0],
-                  opacity: 0.5,
-                }}
+              {/* Character preview — mirror scene */}
+              <Image
+                source={sceneImages.characterMirror}
+                style={{ width: 160, height: 180 }}
+                contentFit="contain"
               />
             </View>
           </MotiView>
