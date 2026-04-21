@@ -11,12 +11,15 @@ import { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { Image } from "expo-image";
 
+import { FeatureGatedAuth } from "@/components/auth/FeatureGatedAuth";
+import { GuestBanner } from "@/components/auth/GuestBanner";
 import { GearSlotGrid } from "@/components/character/GearSlotGrid";
 import { StatBar } from "@/components/character/StatBar";
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
 import { XPBar } from "@/components/ui/XPBar";
 import { STAT_COLORS } from "@/lib/game-rules";
 import { iconImages, statImages } from "@/lib/assets";
+import { useAuthStore } from "@/stores/auth-store";
 import { useCharacterStore, useXpProgress } from "@/stores/character-store";
 import { useHabitStore } from "@/stores/habit-store";
 import { useInventoryStore } from "@/stores/inventory-store";
@@ -53,6 +56,9 @@ export default function CharacterScreen() {
     (s) => s.events.filter((e) => e.eventType === "completed").length,
   );
   const totalGearOwned = useInventoryStore((s) => s.ownedGear.length);
+
+  const isGuest = useAuthStore((s) => s.isGuest);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const [screenView, setScreenView] = useState<ScreenView>("profile");
   const [selectedStat, setSelectedStat] = useState<keyof CharacterStats | null>(
@@ -106,6 +112,17 @@ export default function CharacterScreen() {
 
   const dayNumber = getDayNumber();
 
+  // Feature-gated auth modal for sync
+  if (showAuthModal) {
+    return (
+      <FeatureGatedAuth
+        context="sync"
+        onAuthenticated={() => setShowAuthModal(false)}
+        onDismiss={() => setShowAuthModal(false)}
+      />
+    );
+  }
+
   return (
     <ScreenWrapper>
       <ScrollView
@@ -116,6 +133,11 @@ export default function CharacterScreen() {
         }}
         showsVerticalScrollIndicator={false}
       >
+        {/* Guest banner */}
+        {isGuest && (
+          <GuestBanner onSaveProgress={() => setShowAuthModal(true)} />
+        )}
+
         {/* Avatar — large centered */}
         <View style={{ alignItems: "center", marginBottom: 16 }}>
           <View

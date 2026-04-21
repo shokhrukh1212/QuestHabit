@@ -4,6 +4,8 @@ import { StatusBar } from "expo-status-bar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { useAuthListener } from "@/hooks/useAuthListener";
+
 /**
  * Root layout — wraps the entire app.
  *
@@ -16,6 +18,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
+  useAuthListener();
+
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>

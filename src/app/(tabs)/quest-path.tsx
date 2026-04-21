@@ -12,6 +12,8 @@ import { ScrollView, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { MotiView } from "moti";
 
+import { SavePrompt } from "@/components/auth/SavePrompt";
+import { UrgencyNudge } from "@/components/auth/UrgencyNudge";
 import { CharacterBanner } from "@/components/ui/CharacterBanner";
 import { ScreenWrapper } from "@/components/ui/ScreenWrapper";
 import { LevelUpCelebration } from "@/components/character/LevelUpCelebration";
@@ -26,6 +28,7 @@ import { BASE_XP_PER_HABIT, PERFECT_DAY_BONUS } from "@/lib/game-rules";
 import { getNarrative } from "@/lib/narrative-text";
 import { calculateStreak } from "@/lib/streak-utils";
 import { iconImages, sceneImages } from "@/lib/assets";
+import { useAuthStore } from "@/stores/auth-store";
 import { useCharacterStore } from "@/stores/character-store";
 import { useHabitStore } from "@/stores/habit-store";
 import { useInventoryStore } from "@/stores/inventory-store";
@@ -39,6 +42,7 @@ type ScreenState =
   | "encounter"
   | "celebration"
   | "level_up"
+  | "save_prompt"
   | "campfire"
   | "summary";
 
@@ -61,6 +65,15 @@ export default function QuestPathScreen() {
   const equipGear = useCharacterStore((s) => s.equipGear);
 
   const addGear = useInventoryStore((s) => s.addGear);
+
+  const isGuest = useAuthStore((s) => s.isGuest);
+  const shouldShowSavePrompt = useAuthStore((s) => s.shouldShowSavePrompt);
+  const dismissSavePrompt = useAuthStore((s) => s.dismissSavePrompt);
+  const shouldShowUrgencyNudge = useAuthStore((s) => s.shouldShowUrgencyNudge);
+  const dismissUrgencyNudge = useAuthStore((s) => s.dismissUrgencyNudge);
+
+  const character = useCharacterStore((s) => s.character);
+  const getDayNumber = useCharacterStore((s) => s.getDayNumber);
 
   const [screenState, setScreenState] = useState<ScreenState>("quest_path");
   const [activeWaypoint, setActiveWaypoint] = useState<QuestWaypoint | null>(
@@ -170,16 +183,23 @@ export default function QuestPathScreen() {
       addGear(pendingLevelUp.rewardGear);
 
       // Auto-equip if slot is empty
-      const character = useCharacterStore.getState().character;
-      if (character) {
+      const char = useCharacterStore.getState().character;
+      if (char) {
         const slot = pendingLevelUp.rewardGear.slot;
-        if (!character.equippedGear[slot]) {
+        if (!char.equippedGear[slot]) {
           equipGear(pendingLevelUp.rewardGear);
         }
       }
     }
 
     clearPendingLevelUp();
+
+    // Check if save prompt should be shown (guest + level threshold)
+    const currentLevel = useCharacterStore.getState().character?.level ?? 1;
+    if (shouldShowSavePrompt(currentLevel)) {
+      setScreenState("save_prompt");
+      return;
+    }
 
     // Check if all habits done — proceed to campfire or back to path
     const newCompletedCount = waypoints.filter(
@@ -192,11 +212,37 @@ export default function QuestPathScreen() {
     } else {
       setScreenState("quest_path");
     }
-  }, [pendingLevelUp, addGear, equipGear, clearPendingLevelUp, waypoints, totalCount, addXp]);
+  }, [pendingLevelUp, addGear, equipGear, clearPendingLevelUp, waypoints, totalCount, addXp, shouldShowSavePrompt]);
 
   const handleSummaryDone = useCallback(() => {
     setScreenState("quest_path");
   }, []);
+
+  /** After save prompt — user authenticated or dismissed. */
+  const handleSavePromptDone = useCallback(() => {
+    // Continue to campfire or quest path
+    const newCompletedCount = waypoints.filter(
+      (wp) => wp.status === "completed",
+    ).length + 1;
+
+    if (newCompletedCount >= totalCount) {
+      addXp(PERFECT_DAY_BONUS);
+      setScreenState("campfire");
+    } else {
+      setScreenState("quest_path");
+    }
+  }, [waypoints, totalCount, addXp]);
+
+  const handleSavePromptDismiss = useCallback(() => {
+    const currentLevel = useCharacterStore.getState().character?.level ?? 1;
+    dismissSavePrompt(currentLevel);
+    handleSavePromptDone();
+  }, [dismissSavePrompt, handleSavePromptDone]);
+
+  // Urgency nudge — show on quest path for Day 5+ guests
+  const dayNumber = getDayNumber();
+  const showUrgencyNudge =
+    isGuest && shouldShowUrgencyNudge(dayNumber);
 
   // --- Render ---
 
@@ -245,6 +291,16 @@ export default function QuestPathScreen() {
     return <LevelUpCelebration levelUp={pendingLevelUp} onDone={handleLevelUpDone} />;
   }
 
+  // Save prompt (post level-up for guests)
+  if (screenState === "save_prompt") {
+    return (
+      <SavePrompt
+        onAuthenticated={handleSavePromptDone}
+        onDismiss={handleSavePromptDismiss}
+      />
+    );
+  }
+
   // Campfire celebration (all done)
   if (screenState === "campfire") {
     return <CampfireCelebration onDone={handleCampfireDone} />;
@@ -283,6 +339,18 @@ export default function QuestPathScreen() {
       />
 
       <CharacterBanner />
+
+      {/* Urgency nudge for Day 5+ guests */}
+      {showUrgencyNudge && character && (
+        <UrgencyNudge
+          xp={character.totalXp}
+          level={character.level}
+          streak={0}
+          dayNumber={dayNumber}
+          onSaveNow={() => setScreenState("save_prompt")}
+          onDismiss={dismissUrgencyNudge}
+        />
+      )}
 
       <View className="flex-1 justify-center">
         {/* Quest path — horizontal scroll */}
