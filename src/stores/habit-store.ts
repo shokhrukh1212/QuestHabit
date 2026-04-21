@@ -41,6 +41,8 @@ interface HabitActions {
   getHabitsForToday: () => Habit[];
   /** Check if a habit is completed today. */
   isCompletedToday: (habitId: string) => boolean;
+  /** Migrate all habits and events from "local" userId to a real user ID. */
+  migrateUserId: (newUserId: string) => void;
 }
 
 // --- Helpers ---
@@ -170,6 +172,16 @@ export const useHabitStore = create<HabitState & HabitActions>()(
         const latest = todayEvents[todayEvents.length - 1];
         return latest.eventType === "completed";
       },
+
+      migrateUserId: (newUserId) =>
+        set((state) => ({
+          habits: state.habits.map((h) =>
+            h.userId === "local" ? { ...h, userId: newUserId } : h,
+          ),
+          events: state.events.map((e) =>
+            e.userId === "local" ? { ...e, userId: newUserId } : e,
+          ),
+        })),
     }),
     {
       name: STORAGE_KEY,
